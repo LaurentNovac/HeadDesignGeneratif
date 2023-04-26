@@ -1,32 +1,25 @@
 class Grid {
-  int scaleX = 8;
-  int scaleY = 6;
+  int scaleX = 90;
+  int scaleY = 60;
   int padX = 0;
   int padY = 0;
   int cols = 0;
   int rows = 0;
-  PImage img;
   
   void setup() {
     smooth();
-    noStroke();
     cols = width / scaleX;
     rows = height / scaleY;
-    img = loadImage("sat.jpg");
   }
 
   void cell(int w, int h, float u, float v) {
-    int wImg = img.width;
-    int hImg = img.height;
-
-    color c = img.get(round(u* wImg), round(v * hImg));
-    fill(c);
-
+    //fill(u*255,v*255,0);
+    noFill();
+    stroke(0);
     rect(0, 0, w, h);
   }
 
   void draw() {
-    background(255);
     for (int i = 0; i < cols; i++) {
       for (int j = 0; j < rows; j++) {
         int x = i*scaleX;
