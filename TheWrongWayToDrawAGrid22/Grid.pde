@@ -5,17 +5,22 @@ class Grid {
   int padY = 0;
   int cols = 0;
   int rows = 0;
-  
+  float depth = 0;
+
+
+
   void setup() {
+    noStroke();
     cols = width / scaleX;
     rows = height / scaleY;
   }
 
-  void cell(int w, int h, float u, float v) {
-    //fill(u*255,v*255,0);
+  void cell(int width, int height, float u, float v, float w) {
+    stroke(255);
+    float strk = map(w, 0, 1, 0.5, 2);
+    strokeWeight(strk);
     noFill();
-    stroke(0);
-    rect(0, 0, w, h);
+    rect(0, 0, width, height);
   }
 
   void draw() {
@@ -23,12 +28,12 @@ class Grid {
       for (int j = 0; j < rows; j++) {
         int x = i*scaleX;
         int y = j*scaleY;
-        pushMatrix();
+        push();
         translate(x+padX, y + padY);
         int w = scaleX - 2*padX;
         int h = scaleY - 2*padY;
-        cell(w, h, (float)x / (float)width, (float)y / (float)height);
-        popMatrix();
+        cell(w, h, (float)x / (float)width, (float)y / (float)height, depth);
+        pop();
       }
     }
   }
