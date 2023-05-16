@@ -31,12 +31,18 @@ void draw() {
   int zIndex = round(map(anim, -1, 1, 0, gridCount)); //compute an animated zIndex so the grids are drawn one after the other
   for (int z=gridCount-1; z>=zIndex; z--) { //loop to draw grid
     Grid grid = grids.get(z); //get current grid from grids arraylist
-    float depth = map(z, 0, gridCount-1, 0, 1); //compute a depth value based on grid count
+    float depth = 0;
+    if(gridCount > 1){
+       depth = map(z, 0, gridCount-1, 0, 1); //compute a depth value based on grid count
+    }
     grid.depth = depth; //store it into the grid object
 
+
     push();
-    float gz = map(z, 0, gridCount-1, 0, -10000); //compute a translation in z where first grid would be the closest and last grid the farthest
-    translate(0, 0, gz); //translates position in array to depth levels
+    if(gridCount > 1){
+      float gz = map(z, 0, gridCount-1, 0, -10000); //compute a translation in z where first grid would be the closest and last grid the farthest
+      translate(0, 0, gz); //translates position in array to depth levels
+    }
     float angle = map(depth, 0, 1, 0, TWO_PI); //compute an angla based on depth, the farthest the more it turns a.k.a vortex
     
     //rotate around center

@@ -35,7 +35,7 @@ void initUI() {
   cp5.addSlider("zFar")
     .setPosition(100, 250)
     .setValue(zFar)
-    .setRange(0, -100000);
+    .setRange(0, -1000);
   cp5.addSlider("fovDiv")
     .setPosition(100, 300)
     .setValue(fovDiv)
@@ -71,12 +71,17 @@ void draw() {
 
   for (int z=gridCount-1; z>=zIndex; z--) { //loop to draw grid
     Grid grid = grids.get(z); //get current grid from grids arraylist
-    float depth = map(z, 0, gridCount-1, 0, 1); //compute a depth value based on grid count
+    float depth = 0;
+    if(gridCount > 1){
+       depth = map(z, 0, gridCount-1, 0, 1); //compute a depth value based on grid count
+    }
     grid.depth = depth; //store it into the grid object
 
     push();
-    float gz = map(z, 0, gridCount-1, zNear, zFar); //compute a translation in z where first grid would be the closest and last grid the farthest
-    translate(0, 0, gz); //translates position in array to depth levels
+    if(gridCount > 1){
+      float gz = map(z, 0, gridCount-1, zNear, zFar); //compute a translation in z where first grid would be the closest and last grid the farthest
+      translate(0, 0, gz); //translates position in array to depth levels
+    }
     grid.draw(); //finally draw the grid
     pop();
   }
