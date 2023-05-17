@@ -2,17 +2,17 @@ import controlP5.*;
 
 
 ArrayList<Grid> grids;
-int gridCount = 10;
+int gridCount = 1;
 
 int zIndex = 0;
 float xParallaxOffset = 0;
 float yParallaxOffset = 0;
 float zNear = 0;
 float zFar = -1000;
-float fovDiv = 3.0;
 ControlP5 cp5;
 boolean drawUI = false;
 
+float time = 0;
 void initUI() {
   cp5 = new ControlP5(this);
   cp5.setAutoDraw(false);
@@ -36,10 +36,6 @@ void initUI() {
     .setPosition(100, 250)
     .setValue(zFar)
     .setRange(0, -1000);
-  cp5.addSlider("fovDiv")
-    .setPosition(100, 300)
-    .setValue(fovDiv)
-    .setRange(1.0, 10);
 }
 
 void setup() {
@@ -60,6 +56,7 @@ void setup() {
 }
 
 void draw() {
+  time = (float)millis()/1000.0;
   background(0);
   push();
   float x = xParallaxOffset;
@@ -82,7 +79,7 @@ void draw() {
       float gz = map(z, 0, gridCount-1, zNear, zFar); //compute a translation in z where first grid would be the closest and last grid the farthest
       translate(0, 0, gz); //translates position in array to depth levels
     }
-    grid.draw(); //finally draw the grid
+    grid.draw(time); //finally draw the grid
     pop();
   }
   pop();
