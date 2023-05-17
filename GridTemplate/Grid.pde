@@ -7,19 +7,41 @@ class Grid {
   int rows = 0;
   float depth = 0;
 
-
+  ArrayList<CellData> cellsData;
 
   void setup() {
     noStroke();
     cols = width / scaleX;
     rows = height / scaleY;
+    cellsData = new ArrayList<CellData>();
+
+    for (int i = 0; i < cols; i++) {
+      for (int j = 0; j < rows; j++) {
+        cellsData.add(new CellData());
+      }
+    }
+
+    for (int i = 0; i < cols; i++) {
+      for (int j = 0; j < rows; j++) {
+        int x = i*scaleX;
+        int y = j*scaleY;
+        translate(x+padX, y + padY);
+        int w = scaleX - 2*padX;
+        int h = scaleY - 2*padY;
+        cellInit(w, h, (float)x / (float)width, (float)y / (float)height, depth, cellsData.get(j*cols+i));
+      }
+    }
   }
 
-  void cell(int width, int height, float u, float v, float w) {
+  void cellInit(int width, int height, float u, float v, float w, CellData cellData) {
+    cellData.n = noise(u, v, w);
+  }
+
+  void cell(int width, int height, float u, float v, float w, CellData cellData) {
     stroke(255);
     float strk = map(w, 0, 1, 0.5, 2);
     strokeWeight(strk);
-    noFill();
+    fill(cellData.n*255);
     rect(0, 0, width, height);
   }
 
@@ -32,7 +54,7 @@ class Grid {
         translate(x+padX, y + padY);
         int w = scaleX - 2*padX;
         int h = scaleY - 2*padY;
-        cell(w, h, (float)x / (float)width, (float)y / (float)height, depth);
+        cell(w, h, (float)x / (float)width, (float)y / (float)height, depth, cellsData.get(j*cols+i));
         pop();
       }
     }

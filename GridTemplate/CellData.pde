@@ -1,0 +1,3 @@
+class CellData{
+  float n;
+}
