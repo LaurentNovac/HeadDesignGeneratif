@@ -1,6 +1,6 @@
 class Grid {
   int scaleX = 90;
-  int scaleY = 60;
+  int scaleY = 90;
   int padX = 0;
   int padY = 0;
   int cols = 0;
@@ -25,24 +25,29 @@ class Grid {
       for (int j = 0; j < rows; j++) {
         int x = i*scaleX;
         int y = j*scaleY;
-        translate(x+padX, y + padY);
         int w = scaleX - 2*padX;
         int h = scaleY - 2*padY;
-        cellInit(w, h, (float)x / (float)width, (float)y / (float)height, depth, cellsData.get(j*cols+i));
+        
+        CellData cellData = cellsData.get(j*cols+i);
+        cellData.u = (float)x / (float)width;
+        cellData.v = (float)y / (float)height;
+        cellData.w = depth;
+        cellData.width = w;
+        cellData.height = h;
+        cellInit(cellData);
       }
     }
   }
 
-  void cellInit(int width, int height, float u, float v, float w, CellData cellData) {
-    cellData.n = noise(u, v, w);
+  void cellInit(CellData cellData) {
   }
 
-  void cell(int width, int height, float u, float v, float w, CellData cellData) {
+  void cell(CellData cellData) {
     stroke(255);
-    float strk = map(w, 0, 1, 0.5, 2);
-    strokeWeight(strk);
-    fill(cellData.n*255);
-    rect(0, 0, width, height);
+    //float strk = map(w, 0, 1, 0.5, 2);
+    //strokeWeight(strk);
+    noFill();
+    rect(0, 0, cellData.width, cellData.height);
   }
 
   void draw() {
@@ -54,7 +59,14 @@ class Grid {
         translate(x+padX, y + padY);
         int w = scaleX - 2*padX;
         int h = scaleY - 2*padY;
-        cell(w, h, (float)x / (float)width, (float)y / (float)height, depth, cellsData.get(j*cols+i));
+
+        CellData cellData = cellsData.get(j*cols+i);
+        cellData.u = (float)x / (float)width;
+        cellData.v = (float)y / (float)height;
+        cellData.w = depth;
+        cellData.width = w;
+        cellData.height = h;
+        cell(cellData);
         pop();
       }
     }
