@@ -55,7 +55,7 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+  background(128);
   push();
   float x = xParallaxOffset;
   float y = yParallaxOffset;

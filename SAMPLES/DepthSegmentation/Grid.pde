@@ -1,6 +1,6 @@
 class Grid {
-  int scaleX = 10;
-  int scaleY = 10;
+  int scaleX = 1;
+  int scaleY = 1;
   int padX = 0;
   int padY = 0;
   int cols = 0;
@@ -16,6 +16,7 @@ class Grid {
   void setup() {
     gfx = createGraphics(width, height, P3D);
     img = loadImage("depthmap.jpg");
+    
     noStroke();
     cols = width / scaleX;
     rows = height / scaleY;
@@ -55,7 +56,7 @@ class Grid {
     int currentPlane = round(map(cellData.w, 0, 1, 0, gridCount - 1));
     int dIndex = round(map(d, 0, 255, gridCount - 1, 0));
 
-    if (currentPlane == dIndex) {
+    if (currentPlane == dIndex && d > 0.5) {
       gfx.fill(d, d, d);
       gfx.rect(0, 0, cellData.width, cellData.height);
     }
