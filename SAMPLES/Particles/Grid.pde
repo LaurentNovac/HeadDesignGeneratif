@@ -1,6 +1,6 @@
 class Grid {
-  int scaleX = 90;
-  int scaleY = 90;
+  int scaleX = 10;
+  int scaleY = 10;
   int padX = 0;
   int padY = 0;
   int cols = 0;
@@ -9,11 +9,8 @@ class Grid {
 
   ArrayList<CellData> cellsData;
 
-  PGraphics gfx;
-
   void setup() {
-    gfx = createGraphics(width, height, P3D);
-
+    noStroke();
     cols = width / scaleX;
     rows = height / scaleY;
     cellsData = new ArrayList<CellData>();
@@ -46,23 +43,38 @@ class Grid {
   }
 
   void cell(CellData cellData) {
-    gfx.stroke(255);
+    float nx = map(noise(cellData.u), 0, 1, -1, 1);
+    float ny = map(noise(cellData.v), 0, 1, -1, 1);
+
+
+    PVector force = new PVector(nx, ny);
+    force.normalize();
+    force.mult(.01);
+
+    cellData.acceleration.add(force);
+
+    cellData.velocity.add(cellData.acceleration);
+    cellData.position.add(cellData.velocity);
+
+    stroke(255);
     //float strk = map(w, 0, 1, 0.5, 2);
-    gfx.strokeWeight(3);
-    gfx.noFill();
-    gfx.rect(0, 0, cellData.width, cellData.height);
+    //strokeWeight(strk);
+    fill(255);
+    int w = cellData.width;
+    int h = cellData.height;
+    translate(w/2, h/2);
+    ellipse(cellData.position.x, cellData.position.y, w / 2, h / 2);
+
+    cellData.acceleration.mult(0);
   }
 
   void draw() {
-    gfx.beginDraw();
-    gfx.background(0, 0);
-
     for (int i = 0; i < cols; i++) {
       for (int j = 0; j < rows; j++) {
         int x = i*scaleX;
         int y = j*scaleY;
-        gfx.push();
-        gfx.translate(x+padX, y + padY);
+        push();
+        translate(x+padX, y + padY);
         int w = scaleX - 2*padX;
         int h = scaleY - 2*padY;
 
@@ -73,14 +85,8 @@ class Grid {
         cellData.width = w;
         cellData.height = h;
         cell(cellData);
-        gfx.pop();
+        pop();
       }
     }
-    gfx.endDraw();
-    image(gfx, 0, 0);
-  }
-
-  void save(String path) {
-    gfx.save(path);
   }
 }

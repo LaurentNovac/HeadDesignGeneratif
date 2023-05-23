@@ -1,6 +1,6 @@
 import controlP5.*;
 
-
+int countDebug = 0;
 ArrayList<Grid> grids;
 int gridCount = 10;
 
@@ -8,7 +8,7 @@ int zIndex = 0;
 float xParallaxOffset = 0;
 float yParallaxOffset = 0;
 float zNear = 0;
-float zFar = -1000;
+float zFar = 0;
 ControlP5 cp5;
 boolean drawUI = false;
 
