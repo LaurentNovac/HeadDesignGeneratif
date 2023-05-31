@@ -79,8 +79,4 @@ class Grid {
     gfx.endDraw();
     image(gfx, 0, 0);
   }
-
-  void save(String path) {
-    gfx.save(path);
-  }
 }

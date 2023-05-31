@@ -55,7 +55,7 @@ void setup() {
 }
 
 void draw() {
-  background(0);
+  background(0, 0);
   push();
   float x = xParallaxOffset;
   float y = yParallaxOffset;
@@ -64,16 +64,19 @@ void draw() {
     x+width/2.0, y+height/2.0, 0, //target vector(directions)
     0, 1, 0); // up vector
 
+  if (doSave) {
+    saveEachGrid();
+  }
   for (int z=gridCount-1; z>=zIndex; z--) { //loop to draw grid
     Grid grid = grids.get(z); //get current grid from grids arraylist
     float depth = 0;
-    if(gridCount > 1){
-       depth = map(z, 0, gridCount-1, 0, 1); //compute a depth value based on grid count
+    if (gridCount > 1) {
+      depth = map(z, 0, gridCount-1, 0, 1); //compute a depth value based on grid count
     }
     grid.depth = depth; //store it into the grid object
 
     push();
-    if(gridCount > 1){
+    if (gridCount > 1) {
       float gz = map(z, 0, gridCount-1, zNear, zFar); //compute a translation in z where first grid would be the closest and last grid the farthest
       translate(0, 0, gz); //translates position in array to depth levels
     }
@@ -89,5 +92,42 @@ void draw() {
 void keyPressed() {
   if (key == 'g') {
     drawUI = !drawUI;
+  }
+
+  if (key == 's') {
+    doSave = true;
+  }
+}
+
+boolean doSave = false;
+int counter = 0;
+void saveEachGrid() {
+  for (int z=0; z<gridCount; z++) { //loop to draw grid
+    Grid grid = grids.get(z); //get current grid from grids arraylist
+    float depth = 0;
+    if (gridCount > 1) {
+      depth = map(z, 0, gridCount-1, 0, 1); //compute a depth value based on grid count
+    }
+    grid.depth = depth; //store it into the grid object
+
+    push();
+    if (gridCount > 1) {
+      float gz = map(z, 0, gridCount-1, zNear, zFar); //compute a translation in z where first grid would be the closest and last grid the farthest
+      translate(0, 0, gz); //translates position in array to depth levels
+    }
+    if (z == counter) {
+      grid.draw(); //finally draw the grid
+      String path = "export/img_"+z+".png";
+      saveFrame(path);
+      println("saved "+ path);
+      pop();
+      counter++;
+      break;
+    }
+    pop();
+  }
+  if (counter >= gridCount) {
+    doSave = false;
+    counter = 0;
   }
 }

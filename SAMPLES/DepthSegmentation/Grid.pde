@@ -89,16 +89,7 @@ class Grid {
       }
       gfx.endDraw();
     }
-    if (needSave) {
-      needSave = false;
-      gfx.save(filePath);
-    }
 
     image(gfx, 0, 0);
-  }
-
-  void save(String path) {
-    filePath = path;
-    needSave = true;
   }
 }
